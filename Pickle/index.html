@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Prediction</title>
+</head>
+<body>
+    <h1>Upload Image for Prediction</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="image" id="imageInput" accept="image/*">
+        <button type="submit">Upload and Predict</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const fileInput = document.getElementById('imageInput');
+            formData.append('image', fileInput.files[0]);
+            
+            try {
+                const response = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                document.getElementById('result').innerHTML = 
+                    response.ok ? 
+                    `<h3>Prediction Result:</h3><pre>${JSON.stringify(result, null, 2)}</pre>` :
+                    `<h3>Error:</h3><p>${result.error}</p>`;
+            } catch (error) {
+                document.getElementById('result').innerHTML = 
+                    `<h3>Error:</h3><p>Network error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+pip install flask pillow numpy
+
+pip install scikit-learn==1.6.1
+
+pip install pandas
